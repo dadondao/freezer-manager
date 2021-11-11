@@ -1,12 +1,29 @@
-import { Component } from '@angular/core';
+import { Component , OnInit} from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FoodService } from '../services/food.service';
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
-export class Tab1Page {
+export class Tab1Page implements OnInit {
+  form: FormGroup
 
-  constructor() {}
-
+  constructor(private foodService : FoodService) {}
+  ngOnInit(){
+    this.form = new FormGroup({
+      foodName: new FormControl(null, {
+        validators: [Validators.required]
+      }),
+      datePlaceInFreezer: new FormControl(null , {
+        validators: [Validators.required]
+      })
+    })
+  }
+  add() {
+    console.log(this.form)
+    this.foodService.addFood(this.form.value);
+    this.form.reset();
+  }
 }

@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "freezer-manager-66ddb": {
+      "hosting": {
+        "app": [
+          "freezer-manager-66ddb"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "freezer-manager-66ddb"
+  }
+}

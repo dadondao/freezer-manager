@@ -10,7 +10,7 @@ import { FoodService } from '../services/food.service';
 export class Tab1Page implements OnInit {
   form: FormGroup
 
-  constructor(private foodService : FoodService) {}
+  constructor(private foodService: FoodService) {}
   ngOnInit(){
     this.form = new FormGroup({
       foodName: new FormControl(null, {

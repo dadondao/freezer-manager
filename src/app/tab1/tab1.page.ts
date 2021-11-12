@@ -8,7 +8,8 @@ import { FoodService } from '../services/food.service';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page implements OnInit {
-  form: FormGroup
+  form: FormGroup;
+  isLoading = false;
 
   constructor(private foodService: FoodService) {}
   ngOnInit(){
@@ -23,7 +24,15 @@ export class Tab1Page implements OnInit {
   }
   add() {
     console.log(this.form)
-    this.foodService.addFood(this.form.value);
-    this.form.reset();
+    this.isLoading = true;
+    this.foodService.addFood(this.form.value)
+    .then(data => {
+      console.log('data', data);
+      this.isLoading = false;
+    })
+    .catch(err => {
+      this.isLoading = false;
+      console.error(err);
+    })
   }
 }

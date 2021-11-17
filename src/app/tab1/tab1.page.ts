@@ -29,6 +29,7 @@ export class Tab1Page implements OnInit {
     .then(data => {
       console.log('data', data);
       this.isLoading = false;
+      this.form.reset();
     })
     .catch(err => {
       this.isLoading = false;

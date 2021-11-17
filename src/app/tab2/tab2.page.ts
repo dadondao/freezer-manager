@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription , observable } from 'rxjs';
 import { FoodService } from '../services/food.service';
 import { Food } from '../interfaces/food.modal';
+import { take } from 'rxjs/operators'
+
 
 @Component({
   selector: 'app-tab2',
@@ -11,6 +13,7 @@ import { Food } from '../interfaces/food.modal';
 export class Tab2Page implements OnInit, OnDestroy{
   allFoodInFreezer = [];
   sub: Subscription;
+  isLoading = false;
 
   constructor(private foodService: FoodService) {}
 
@@ -21,9 +24,9 @@ export class Tab2Page implements OnInit, OnDestroy{
       this.allFoodInFreezer = data.map(e => {
         const foodItem = {
           id: e.payload.doc.id,
-          ...e.payload.doc.data
+          ...e.payload.doc.data() as Food
         } as Food;
-        console.log('foodItem', foodItem);
+        console.log('foodItem', foodItem.datePlaceInFreezer);
         return foodItem;
       })
     }, err => {})
@@ -32,6 +35,27 @@ export class Tab2Page implements OnInit, OnDestroy{
     // this.allFoodInFreezer = this.foodService.allFood;
     console.log('ngOnInit', this.allFoodInFreezer );
   }
+
+  edit(id) {
+    console.log('id' , id);
+  }
+
+  delete(id) {
+    console.log('id' , id);
+    this.isLoading = true;
+    this.foodService
+    .deleteFood(id)
+    .pipe(
+      take(1)
+    )
+    .subscribe(data => {
+      this.isLoading = false
+    }, err => {
+      this.isLoading = false;
+      console.error(err);
+    })
+  }
+
   ngOnDestroy(){
     this.sub.unsubscribe();
   }

@@ -1,8 +1,10 @@
+import { ModalController } from '@ionic/angular';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription , observable } from 'rxjs';
 import { FoodService } from '../services/food.service';
 import { Food } from '../interfaces/food.modal';
 import { take } from 'rxjs/operators'
+import { EditModal } from './edit-modal';
 
 
 @Component({
@@ -15,7 +17,7 @@ export class Tab2Page implements OnInit, OnDestroy{
   sub: Subscription;
   isLoading = false;
 
-  constructor(private foodService: FoodService) {}
+  constructor(private foodService: FoodService , private modalController: ModalController) {}
 
   ngOnInit() {
     // this.allFoodInFreezer = this.foodService.allFood;
@@ -36,8 +38,13 @@ export class Tab2Page implements OnInit, OnDestroy{
     console.log('ngOnInit', this.allFoodInFreezer );
   }
 
-  edit(id) {
+ async edit(id) {
     console.log('id' , id);
+    const modal = await this.modalController.create({
+      component: EditModal,
+      componentProps: {'foodId': id}
+    });
+    return await modal.present()
   }
 
   delete(id) {
@@ -46,8 +53,8 @@ export class Tab2Page implements OnInit, OnDestroy{
     this.foodService
     .deleteFood(id)
     .pipe(
-      take(1)
-    )
+      take(1),
+      )
     .subscribe(data => {
       this.isLoading = false
     }, err => {
